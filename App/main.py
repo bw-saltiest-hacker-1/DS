@@ -2,11 +2,12 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 
-from app.api import predict, viz
+from App.Api import predict, viz
 
 app = FastAPI(
-    title='Saltiest Hacker',
-    description='An application showing the saltiness of posts from Hacker News',
+    title='Who is the Saltiest Hacker?',
+    description="""Identifying and ranking negative commenters on 
+    Hacker News using sentiment analysis.""",
     version='0.1',
     docs_url='/',
 )
