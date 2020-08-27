@@ -2,6 +2,7 @@
 ## An app that shows the saltiest commenters from Hacker News stories
 ## Data engineering by:
 * Unit 3 - Jay Adamo, Brad Brauser & Ryan Koul
+## Machine learning by:
 * Unit 4 - Rob Bennet & Hernan Echeverry
 ## Project Details
 1. Utilizing a cleaned dataframe the team engineered a database consisting of 2 tables which held necessary data such as comment author and comment text.
