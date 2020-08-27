@@ -32,7 +32,7 @@ class Item(BaseModel):
     #     return value
 
 # get path - to read data
-# @router.get('/hn_db.db') 
+# @router.get('/hn_db.db')
 #     return {'Top 10 most popular commenters rated by saltiness': randint(1, 100)}
 # @router.get('/hn_db.db')
 #     return {'Top 10 most popular commenters': randint(1, 100)}
@@ -40,8 +40,14 @@ class Item(BaseModel):
 
 @router.get('/salty')
 async def predict(num: int = 1000):
-    """Returns 1,000 saltiest Hacker News commenters, default 1,0000."""
+    """Returns saltiest Hacker News commenters, default 1,0000."""
 
+    if num < 1:
+        return 'Number of commenters must be positive.'
+    elif num > 28591:
+        return f"""There are only 28591 commenters in this database. Please choose a smaller number."""
+    else:
+        pass
     conn = sqlite3.connect('hn_db.db')
     curs = conn.cursor()
     query = ("""
@@ -51,6 +57,9 @@ async def predict(num: int = 1000):
         """)
     df = pd.read_sql(sql=query, con=conn)
 
+    # Make a shallow copy
+    df = df[:]
+
     # Subset dataframe
     df = df[:num]
 
@@ -59,4 +68,5 @@ async def predict(num: int = 1000):
 
     # Return dataframe as a JSON object whose keys are comment_author
     # and whose values are the corresponding saltiness
-    return df.to_json(orient='index')
+    result = df.to_json(orient='index')
+    return result

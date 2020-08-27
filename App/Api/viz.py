@@ -6,7 +6,7 @@ import sqlite3
 router = APIRouter()
 
 
-@router.get('/viz/')  # check the documentation, assistance with router 
+@router.get('/viz/')  # check the documentation, assistance with router
 async def viz():
 
     def salt_rank():
