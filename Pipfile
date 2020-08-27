@@ -17,6 +17,7 @@ pandas = "*"
 uvicorn = "*"
 plotly = "*"
 vadersentiment = "*"
+gunicorn = "*"
 
 [requires]
 python_version = "3.7"
