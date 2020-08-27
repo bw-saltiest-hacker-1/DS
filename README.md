@@ -1,4 +1,5 @@
 # Who is the saltiest hacker? 
+
 ## An app that shows the saltiest commenters from Hacker News stories
 ### Data engineering by: Jay Adamo, Brad Brauser & Ryan Koul
 ### Machine learning by: Rob Bennet & Hernan Echeverry
@@ -12,5 +13,5 @@
 ### 7. The DS team then deployed an app to Heroku and passed on the information to the Web team.
 ### App deployed to: https://saltiest-hacker-news.herokuapp.com
 
-
+![Imgur](https://i.imgur.com/VmRC6Ak.png)
 
