@@ -4,11 +4,13 @@ from fastapi import APIRouter
 import pandas as pd
 import numpy as np
 from pydantic import BaseModel, Field, validator
-from App.Api.model import *
+from App.Api.model import preprocessing, sentiment_analysis
+# from model import preprocessing, sentiment_analysis
 import sqlite3
-import random
-from random import randint
-# import viz
+# import static database as dataframe
+# from App.Api.update_db import db_as_df
+# from update_db import db_as_df
+# import App.Api.viz
 
 
 log = logging.getLogger(__name__)
@@ -17,9 +19,6 @@ router = APIRouter()
 
 class Item(BaseModel):
     """Use this data model to parse the request body JSON."""
-    comment_author : str = Field(..., example='marshray')
-    # Potential code
-    comment_author: str = Field(..., example='marshray')
 
     def to_df(self):
         """Convert pydantic object to pandas dataframe with 1 row."""
@@ -39,31 +38,25 @@ class Item(BaseModel):
 #     return {'Top 10 most popular commenters': randint(1, 100)}
 
 
-@router.post('/predict')
-async def predict(item: Item):
-    """Make random baseline predictions for classification problem"""
+@router.get('/salty')
+async def predict(num: int = 1000):
+    """Returns 1,000 saltiest Hacker News commenters, default 1,0000."""
+
     conn = sqlite3.connect('hn_db.db')
     curs = conn.cursor()
-    SQL_Query = pd.read_sql_query('''
-                                  SELECT comment_author, comment_text, sentiment
-                                  FROM hn_comments
-                                  LIMIT 100
-                                  ''', conn)
-    df = pd.DataFrame(SQL_Query, columns=['comment_author', 'comment_text', 'sentiment'])
-    df = preprocessing(df)
-    sentiment_analysis(df)
+    query = ("""
+        SELECT comment_author, saltiness
+        FROM hn_users
+        ORDER BY saltiness ASC;
+        """)
+    df = pd.read_sql(sql=query, con=conn)
 
-    hn_rank = df.copy()
-    df_test = hn_rank.groupby(['comment_author', 'sentiment']).size().unstack(fill_value=0)
-    df_test['Saltiness'] = df_test['Negative'] - df_test['Positive']
-    df_test = df_test.drop(['Negative','Positive'], axis=1)
-    df_test = df_test.sort_values(by='Saltiness', ascending=False)
-    df_final = df.merge(df_test, how='inner', on='comment_author').drop(column=['sentiment'])
-    # y_pred = sentiment_analysis(item.comment.id)
-    # return {'prediction': y_pred} 
-    # y_pred = comment_sentiment(item.comment.id)
-    # return {'prediction': y_pred}
-    result = df.to_json()
-    # breakpoint()
-    return result
+    # Subset dataframe
+    df = df[:num]
 
+    # Change index to comment_author
+    df = df.set_index(keys='comment_author')
+
+    # Return dataframe as a JSON object whose keys are comment_author
+    # and whose values are the corresponding saltiness
+    return df.to_json(orient='index')

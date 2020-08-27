@@ -35,3 +35,5 @@ def sentiment_analysis(df):
         returned_sentiment = sid_obj.polarity_scores(comment)
         for polarity in returned_sentiment:
             df.at[i, polarity] = returned_sentiment[polarity]
+
+    return df
