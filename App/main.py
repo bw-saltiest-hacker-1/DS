@@ -8,7 +8,7 @@ app = FastAPI(
     title='Who is the Saltiest Hacker?',
     description="""Identifying and ranking negative commenters on 
     Hacker News using sentiment analysis.""",
-    version='0.1',
+    version='0.1.8',
     docs_url='/',
 )
 
