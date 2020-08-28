@@ -37,7 +37,11 @@ def update_db(db='hn_db.db', table_name='hn_users'):
     # If this table already exists, drop it before inserting new values
     df_test.to_sql(name=table_name, con=conn, if_exists='replace')
 
-    return df_test
+    # Feature engineer saltiness rankings(1, 2, 3..)
+    rankings = []
+    for i, _ in enumerate(df_test['saltiness']):
+        rankings.append(i+1)
 
 
+# Add new SQL table to database
 db_as_df = update_db()

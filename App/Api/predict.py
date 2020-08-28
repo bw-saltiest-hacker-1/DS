@@ -39,7 +39,7 @@ class Item(BaseModel):
 
 
 @router.get('/salty')
-async def predict(num: int = 1000):
+async def get_salt(num: int = 1000):
     """Returns saltiest Hacker News commenters, default 1,0000."""
 
     if num < 1:
@@ -50,23 +50,42 @@ async def predict(num: int = 1000):
         pass
     conn = sqlite3.connect('hn_db.db')
     curs = conn.cursor()
-    query = ("""
-        SELECT comment_author, saltiness
+    saltiness_query = ("""
+        SELECT comment_author, saltiness, rankings
         FROM hn_users
         ORDER BY saltiness ASC;
         """)
-    df = pd.read_sql(sql=query, con=conn)
+    saltiness_df = pd.read_sql(sql=saltiness_query, con=conn)
 
     # Make a shallow copy
-    df = df[:]
+    saltiness_df = saltiness_df[:]
 
     # Subset dataframe
-    df = df[:num]
+    saltiness_df = saltiness_df[:num]
 
     # Change index to comment_author
-    df = df.set_index(keys='comment_author')
+    saltiness_df = saltiness_df.set_index(keys='comment_author')
+
+    # JSON response object
+    author_saltiness_rank = saltiness_df.to_json(orient='index')
+
+    # GET COMMENT TEXT
+    comments_query = ("""
+    SELECT comment_author, comment_text
+    FROM hn_comments
+    ORDER BY comment_author;
+    """)
+
+    comments_df = pd.read_sql(sql=comments_query, con=conn)
+
+    # Make a shallow copy
+    comments_df = comments_df[:]
 
     # Return dataframe as a JSON object whose keys are comment_author
     # and whose values are the corresponding saltiness
-    result = df.to_json(orient='index')
-    return result
+
+    # JSON response object
+    author_comments = comments_df.to_json()
+
+    # Return Json users, Json comment
+    return author_saltiness_rank, author_comments
