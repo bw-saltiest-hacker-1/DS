@@ -6,7 +6,7 @@ from App.Api import predict
 
 app = FastAPI(
     title='Who is the Saltiest Hacker?',
-    description="""Identifying and ranking negative commenters on 
+    description="""Identifying and ranking negative commenters on
     Hacker News using sentiment analysis.""",
     version='0.1.9.7',
     docs_url='/',
