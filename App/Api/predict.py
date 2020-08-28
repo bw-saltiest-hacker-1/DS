@@ -32,14 +32,14 @@ class Item(BaseModel):
     #     return value
 
 # get path - to read data
-# @router.get('/hn_db.db')
-#     return {'Top 10 most popular commenters rated by saltiness': randint(1, 100)}
-# @router.get('/hn_db.db')
+# @router.get('/hn_db.db'):
+#     return {'Top 10 most popular commenters by saltiness': randint(1, 100)}
+# @router.get('/hn_db.db'):
 #     return {'Top 10 most popular commenters': randint(1, 100)}
 
 
 @router.get('/salty')
-async def get_salt(num: int = 1000):
+async def get_salt(num: int=1000):
     """Returns saltiest Hacker News commenters, default 1,0000."""
 
     if num < 1:
@@ -89,3 +89,4 @@ async def get_salt(num: int = 1000):
 
     # Return Json users, Json comment
     return author_saltiness_rank, author_comments
+    
