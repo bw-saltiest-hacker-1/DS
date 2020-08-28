@@ -2,7 +2,7 @@
 to database of Hacker News comments."""
 import sqlite3
 import pandas as pd
-from App.Api.model import preprocessing, sentiment_analysis   # For app deployment
+from App.Api.model import preprocessing, sentiment_analysis  # App deployment
 # from model import preprocessing, sentiment_analysis     # For testing locally
 
 # Run once, save to databsae, and changes will persist
@@ -13,7 +13,6 @@ def update_db(db='hn_db.db', table_name='hn_users'):
     Generates dataframe from SQLite3 query of all rows in database.
     Makes and adds SQL table to sqlite3 database passed in.
     Returns dataframe.
-
     Default database is hn_db.db, default table_name is hn_users.
     """
 
